@@ -1,0 +1,9 @@
+.img_card{
+    object-fit: cover;
+    height: 240px;
+}
+
+.my-table {
+    background-color: white;
+    border: solid 1px #f8f9fa;
+}
