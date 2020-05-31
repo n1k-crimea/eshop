@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Stripe;
 use App\Order;
 use App\Product;
 use Illuminate\Http\Request;
@@ -27,22 +28,47 @@ class CartController extends Controller
         $order = Order::find($order_id);
         return view('order', compact('order'));
     }
+
     public function cart_confirm(Request $request) {
         $order_id = session('order_id');
         if (is_null($order_id)) {
             return redirect()->route('index');
         }
         $order = Order::find($order_id);
-        $result = $order->save_order($request->name, $request->phone);
-        if ($result){
-            session()->flash('success', 'Заказ принят в обработку');
+        if ($this->cart_payment($request, $order->get_total_price(), $order)) {
+            $result = $order->save_order($request->name, $request->phone);
+            if ($result){
+                session()->flash('success', 'Заказ оплачен и принят в обработку');
+                session()->forget('order_id');
+            }
+            else {
+                session()->flash('warning', 'Произошла ошибка');
+            }
         }
-        else {
-            session()->flash('warning', 'Произошла ошибка');
-        }
-        session()->forget('order_id');
         return redirect()->route('index');
     }
+
+    public function cart_payment(Request $request, $amount, $order) {
+
+            Stripe\Stripe::setApiKey('sk_test_AVhMDMKgvDXglrnOB2xgGc5y00l5WWcOig');
+            $token = $_POST['stripeToken'];
+            $charge = \Stripe\Charge::create([
+                'amount' =>  100 * $amount,
+                'currency' => 'USD',
+                'description' => 'Оплата заказа №'.$order->id,
+                "metadata" => ["order_id" => $order->id],
+                'source' => $token,
+            ]);
+            if($charge['status'] == 'succeeded') {
+                session()->flash('success', 'Заказ оплачен');
+                return true;
+                //return redirect('stripe')->with('success', 'Payment Success!');
+            } else {
+                session()->flash('warning', 'Произошла ошибка оплаты');
+                return false;
+                //return redirect('cart')->with('warning', 'Произошла ошибка оплаты');
+            }
+        }
 
     public function cart_add($product_id) {
         $order_id = session('order_id');

@@ -37,6 +37,7 @@ return array(
     'Symfony\\Component\\Debug\\' => array($vendorDir . '/symfony/debug'),
     'Symfony\\Component\\CssSelector\\' => array($vendorDir . '/symfony/css-selector'),
     'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
+    'Stripe\\' => array($vendorDir . '/stripe/stripe-php/lib'),
     'Spatie\\TemporaryDirectory\\' => array($vendorDir . '/spatie/temporary-directory/src'),
     'Spatie\\PdfToImage\\' => array($vendorDir . '/spatie/pdf-to-image/src'),
     'Spatie\\MediaLibrary\\' => array($vendorDir . '/spatie/laravel-medialibrary/src'),
