@@ -50,7 +50,7 @@ class CartController extends Controller
 
     public function cart_payment(Request $request, $amount, $order) {
 
-            Stripe\Stripe::setApiKey('sk_test_AVhMDMKgvDXglrnOB2xgGc5y00l5WWcOig');
+            Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
             $token = $_POST['stripeToken'];
             $charge = \Stripe\Charge::create([
                 'amount' =>  100 * $amount,

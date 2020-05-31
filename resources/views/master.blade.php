@@ -53,7 +53,7 @@
 </div>
 <script>
     // Create a Stripe client.
-    var stripe = Stripe('pk_test_HcyH11lWYd22SNAvYmY9Yjdd00alWQeFXR');
+    var stripe = Stripe({{ env('STRIPE_KEY') }});
 
     // Create an instance of Elements.
     var elements = stripe.elements();
