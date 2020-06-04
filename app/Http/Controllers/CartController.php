@@ -40,6 +40,7 @@ class CartController extends Controller
             if ($result){
                 session()->flash('success', 'Заказ оплачен и принят в обработку');
                 session()->forget('order_id');
+                return view('finish', compact('order'));
             }
             else {
                 session()->flash('warning', 'Произошла ошибка');
@@ -62,11 +63,9 @@ class CartController extends Controller
             if($charge['status'] == 'succeeded') {
                 session()->flash('success', 'Заказ оплачен');
                 return true;
-                //return redirect('stripe')->with('success', 'Payment Success!');
             } else {
                 session()->flash('warning', 'Произошла ошибка оплаты');
                 return false;
-                //return redirect('cart')->with('warning', 'Произошла ошибка оплаты');
             }
         }
 
